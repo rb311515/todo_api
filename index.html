@@ -1,0 +1,185 @@
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <style>
+            body {font-family: Arial;}
+
+            /* Style the tab */
+            .tab {
+                overflow: hidden;
+                border: 1px solid #ccc;
+                background-color: #f1f1f1;
+            }
+
+            /* Style the buttons inside the tab */
+            .tab button {
+                background-color: inherit;
+                float: left;
+                border: none;
+                outline: none;
+                cursor: pointer;
+                padding: 14px 16px;
+                transition: 0.3s;
+                font-size: 17px;
+                color: #000;
+            }
+
+            /* Change background color of buttons on hover */
+            .tab button:hover {
+                background-color: #BADDAB;
+            }
+
+            /* Create an active/current tablink class */
+            .tab button.active {
+                background-color: #FABDAD;
+            }
+
+            /* Style the tab content */
+            .tabcontent {
+                display: none;
+                padding: 6px 12px;
+                border: 1px solid #ccc;
+                border-top: none;
+            }
+
+            /* Style the list */
+            li {
+                list-style: none;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            /* Button style */
+            button {
+                position: relative;
+                display: inline-block;
+                background: #ccc;
+                border-radius: 5px;
+                border-width: 1px 1px 1px 1px;
+                padding: 15px 15px 15px 15px;
+                box-shadow: inset 0px 0px 4px #ffffff,0px 1px 3px rgba(100%,100%,100%,0);
+                color: #000;
+                font-size: 16px;
+                font-family: Arial;
+                font-weight: 900;
+                font-style: normal;
+            }
+
+            /* Hover style match to tab button */
+            button:hover {
+                background-color: #BADDAB;
+            }
+
+            /* Change the looks of the input */
+            input {
+                position: relative;
+                display: inline-block;
+                background: #fff;
+                border-radius: 5px;
+                border-width: 1px 1px 1px 1px;
+                padding: 15px 15px 15px 15px;
+                box-shadow: inset 0px 0px 4px #ffffff,0px 1px 3px rgba(100%,100%,100%,0);
+                color: #000;
+                font-size: 16px;
+                font-family: Arial;
+                font-weight: 900;
+                font-style: normal;
+            }
+
+            /* background image is generated from https://msurguy.github.io/triangles/ project */
+            body{
+                background: url(triangles-download.png) blue;
+                color: #000;
+                font-size: 18px;
+                font-family: Arial;
+                font-weight: 900;
+                font-style: normal;
+                padding: 30px;
+            }
+        </style>
+        <script src="../vue/dist/vue.js"></script>
+    </head>
+    <body>
+
+        <p>Click on the buttons inside the tabbed menu:</p>
+
+        <div id="whole">
+            <div class="tab">
+              <button class="tablinks" onclick="openPage(event, 'Lists')">Todo Lists</button>
+              <button class="tablinks" onclick="openPage(event, 'Todo')">Todo items</button>
+              <button class="tablinks" onclick="openPage(event, 'Search')">Search</button>
+            </div>
+
+            <div id="Todo" class="tabcontent">
+                <ol>
+                    {{todo}}
+                    <br>
+                    <div v-if="displayTodoBool === true">
+                        <div v-if="editTodoBool === true">
+                            <input v-model="todoID">
+                            <br><input v-model="todoTitle"><button v-on:click="editTodo">Edit Todo</button>
+                        </div>
+                        <div v-else>
+                            <button v-on:click="editTodoOpen()">Edit Todo</button>
+                        </div>
+                        <br>
+                        <button v-on:click="deleteTodo">Delete Todo</button>
+                    </div>
+                    <div v-else>
+                        <input v-model="todoID"><button v-on:click="displayTodo">Todo</button>
+                        <br>
+                    </div>
+                    <br>
+                    <div v-if="createTodoBool === true">
+                        <input v-model="todoList">
+                        <br><input v-model="todoTitle"><button v-on:click="createTodo">Create Todo</button>
+                    </div>
+                    <div v-else>
+                        <button v-on:click="createTodoOpen()">Create Todo</button>
+                    </div>
+                    <br>
+                </ol>
+            </div>
+
+            <div id="Lists" class="tabcontent">
+              	<ol>
+                    <input v-on:keyup.13="displayList(ListID)" v-model="ListID"><button v-on:click="displayList(ListID)">Todo List</button>
+                    {{message}}
+                    <br>
+                    <li v-for="todo, i in todos">
+                        <button v-on:click="deleteTodos(todo, i)">Delete Todo</button> {{todo}}
+                    </li>
+                    <br>
+                    <div v-if="alterList === true">
+                        <input v-model="ListName"><button v-on:click="nameList">Name Todo List</button>
+                    </div>
+                    <div v-else>
+                        <button v-on:click="editList">Edit Todo List</button>
+                    </div>
+                </ol>
+            </div>
+
+            <div id="Search" class="tabcontent">
+                
+                    Search Todo Item: {{message}}
+                <li v-for="todoRes, i in todoSearch">
+                    NAME: {{todoRes.title}} ID: {{todoRes.id}}
+                </li>
+                <li>    
+                    <div v-if="openSearchBool === true">
+                        <input v-on:keyup.13="searchTodo(searchTitle)" v-model="searchTitle"><button v-on:click="searchTodo(searchTitle)">Submit</button>
+                    </div>
+                    <div v-else>
+                        <button v-on:click="openSearch">Search for Todo</button>
+                    </div>
+                </li>
+            </div>
+
+            <div id="wholeList">
+            </div>
+        </div>
+
+        <script src="index.js"></script>
+         
+    </body>
+</html>

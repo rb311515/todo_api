@@ -24,7 +24,14 @@ class TodoSchema(ma.ModelSchema):
         include_fk = True
         exclude = ('todo_list',)
 
+class TodoSearch(ma.ModelSchema):
+    title = field_for(TodoList,'name', validate=not_blank)
+
+    class Meta:
+        model = Todo
 
 todo_list_schema = TodoListSchema()
 todo_lists_schema = TodoListSchema(many=True)
 todo_schema = TodoSchema()
+todos_schema = TodoSchema(many=True)
+todo_search_schema = TodoSearch()

@@ -75,6 +75,32 @@ paths:
           description: "Success"
         404:
           description: "Todo list not found"
+    patch:
+      summary: "Update todo list by ID"
+      operationId: "updateTodoListById"
+      consumes:
+      - "application/json"
+      produces:
+      - "application/json"
+      parameters:
+      - name: "listId"
+        in: "path"
+        description: "ID of todo list to update"
+        required: true
+        type: "integer"
+        format: "int64"
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/TodoListUpdate"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/TodoList"
+        404:
+          description: "Todo list not found"
   /todo:
     post:
       summary: "Create a new todo item"
@@ -94,6 +120,37 @@ paths:
           description: "Created"
           schema:
             $ref: "#/definitions/Todo"
+  /todos:
+    get:
+      summary: "Show all todos"
+      operationId: "getTodos"
+      produces:
+      - "application/json"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Todo"
+        404:
+          description: "Todos not found"
+    post:
+      summary: "Find todos by title"
+      operationId: "getTodosByTitle"
+      produces:
+      - "application/json"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Todo"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: "#/definitions/Todo"
+        404:
+          description: "Todos not found"
   /todo/{todoId}:
     get:
       summary: "Find todo by ID"
